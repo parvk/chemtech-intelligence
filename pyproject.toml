@@ -64,6 +64,9 @@ select = ["E", "F", "I", "UP"]
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
 testpaths = ["tests"]
+markers = [
+    "integration: hits real external APIs — skip in CI with -m 'not integration'",
+]
 
 [tool.mypy]
 python_version = "3.11"

@@ -58,11 +58,46 @@ docker logs -f chemflow_intelligence_worker
 # Open a shell in the API container
 docker exec -it chemflow_intelligence_api bash
 
-# Run tests inside container
-docker exec -it chemflow_intelligence_api pytest
-
 # Restart just the worker (after code change without hot reload)
 docker compose restart worker
+```
+
+---
+
+## Tests
+
+```bash
+# Run all tests (includes live PubChem integration calls)
+docker exec chemflow_intelligence_api pytest tests/ -v
+
+# Unit tests only — offline, safe for CI
+docker exec chemflow_intelligence_api pytest tests/ -v -m "not integration"
+
+# Single test file
+docker exec chemflow_intelligence_api pytest tests/test_molecule_service.py -v
+docker exec chemflow_intelligence_api pytest tests/test_ranking.py -v
+docker exec chemflow_intelligence_api pytest tests/test_schemas.py -v
+docker exec chemflow_intelligence_api pytest tests/test_synthesis_api.py -v
+
+# With coverage report
+docker exec chemflow_intelligence_api pytest tests/ -m "not integration" --cov=app --cov-report=term-missing
+```
+
+### Test Structure
+
+| File | Scope | External calls |
+|------|-------|---------------|
+| `test_health.py` | Health, docs, OpenAPI schema | None |
+| `test_schemas.py` | Pydantic model validation, field bounds, enums | None |
+| `test_ranking.py` | Stage 4 — ranking logic, composite scores, top-N | None |
+| `test_molecule_service.py` | Stage 1 — molecule resolution (all input formats) | PubChem (integration only) |
+| `test_synthesis_api.py` | API layer — job submit, status polling, result retrieval | None (Celery mocked) |
+
+### Marks
+
+| Mark | Usage |
+|------|-------|
+| `integration` | Hits real external APIs (PubChem). Skip in CI with `-m "not integration"` |
 ```
 
 ---

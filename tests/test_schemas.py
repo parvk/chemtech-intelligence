@@ -13,9 +13,9 @@ from app.models.job import JobStatus, SynthesisPlanRequest
 # ─── MoleculeInput ────────────────────────────────────────────────────────────
 
 class TestMoleculeInput:
-    def test_default_format_is_smiles(self):
+    def test_default_format_is_none(self):
         m = MoleculeInput(value="CCO")
-        assert m.format == InputFormat.SMILES
+        assert m.format is None
 
     def test_explicit_cas_format(self):
         m = MoleculeInput(value="64-17-5", format=InputFormat.CAS)

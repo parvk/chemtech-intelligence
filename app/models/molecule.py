@@ -20,11 +20,19 @@ class OptimisationDimension(str, Enum):
 
 class MoleculeInput(BaseModel):
     value: str = Field(..., description="Molecule identifier — SMILES, CAS, IUPAC name, or plain language description")
-    format: InputFormat = Field(InputFormat.SMILES, description="Format of the input value")
+    format: InputFormat | None = Field(
+        None,
+        description=(
+            "Format of the input value. "
+            "If omitted, format is auto-detected. "
+            "Auto-detection fails loudly on ambiguous input — provide format explicitly to override."
+        ),
+    )
 
 
 class ResolvedMolecule(BaseModel):
     canonical_smiles: str
+    detected_format: InputFormat | None = None  # set when format was auto-detected
     inchi: str | None = None
     inchikey: str | None = None
     molecular_formula: str | None = None
