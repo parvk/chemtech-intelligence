@@ -1,53 +1,131 @@
+# Local development
+# Usage: docker compose up
+#        docker compose --profile tools up   (includes pgadmin + flower UI)
+
 services:
   api:
-    build: .
+    build:
+      context: .
+      target: development
+    container_name: chemflow_intelligence_api
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload
+    volumes:
+      - ./app:/app/app
+      - ./tests:/app/tests
+      - ./data:/app/data
+      - ./config:/app/config
     ports:
       - "8001:8001"
     env_file: .env
+    environment:
+      - APP_ENV=development
+      - DATABASE_URL=postgresql+asyncpg://chemflow:chemflow@postgres:5432/chemflow_intelligence
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
     depends_on:
-      - redis
-      - postgres
-    volumes:
-      - ./app:/app/app
-      - ./data:/app/data
-      - ./config:/app/config
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - chemtech_network
 
   worker:
-    build: .
-    command: celery -A app.workers.celery_app worker --loglevel=info --concurrency=1
-    env_file: .env
-    depends_on:
-      - redis
-      - postgres
+    build:
+      context: .
+      target: development
+    container_name: chemflow_intelligence_worker
+    command: celery -A app.workers.celery_app worker --loglevel=debug --concurrency=1
     volumes:
       - ./app:/app/app
       - ./data:/app/data
       - ./config:/app/config
+    env_file: .env
+    environment:
+      - APP_ENV=development
+      - DATABASE_URL=postgresql+asyncpg://chemflow:chemflow@postgres:5432/chemflow_intelligence
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - chemtech_network
 
   flower:
-    build: .
+    build:
+      context: .
+      target: development
+    container_name: chemflow_intelligence_flower
     command: celery -A app.workers.celery_app flower --port=5555
     ports:
       - "5555:5555"
     env_file: .env
+    environment:
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/1
     depends_on:
       - redis
-
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
+    networks:
+      - chemtech_network
+    profiles:
+      - tools
 
   postgres:
     image: postgres:16-alpine
+    container_name: chemflow_intelligence_postgres
     environment:
       POSTGRES_USER: chemflow
       POSTGRES_PASSWORD: chemflow
       POSTGRES_DB: chemflow_intelligence
     ports:
-      - "5432:5432"
+      - "5434:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U chemflow -d chemflow_intelligence"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - chemtech_network
+
+  redis:
+    image: redis:7-alpine
+    container_name: chemflow_intelligence_redis
+    ports:
+      - "6380:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - chemtech_network
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: chemflow_intelligence_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@chemflow.local
+      PGADMIN_DEFAULT_PASSWORD: admin
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    ports:
+      - "5051:80"
+    depends_on:
+      - postgres
+    networks:
+      - chemtech_network
+    profiles:
+      - tools
 
 volumes:
   postgres_data:
+
+networks:
+  chemtech_network:
+    external: true

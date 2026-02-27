@@ -1,0 +1,62 @@
+# Production overrides
+# Usage: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+
+services:
+  api:
+    build:
+      context: .
+      target: production
+    container_name: chemflow_intelligence_api
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8001 --workers 2 --loop uvloop --http httptools
+    volumes: []
+    restart: unless-stopped
+    environment:
+      - APP_ENV=production
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+
+  worker:
+    build:
+      context: .
+      target: production
+    container_name: chemflow_intelligence_worker
+    command: celery -A app.workers.celery_app worker --loglevel=info --concurrency=1
+    volumes: []
+    restart: unless-stopped
+    environment:
+      - APP_ENV=production
+    healthcheck:
+      test: ["CMD", "celery", "-A", "app.workers.celery_app", "inspect", "ping"]
+      interval: 60s
+      timeout: 15s
+      retries: 3
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 4g   # GPU/model inference headroom
+
+  # Flower not exposed in production — access via internal tooling only
+  flower:
+    profiles:
+      - internal-tools
+
+  postgres:
+    restart: unless-stopped
+    ports: []            # Not exposed outside container network in production
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+
+  redis:
+    restart: unless-stopped
+    ports: []            # Not exposed outside container network in production
