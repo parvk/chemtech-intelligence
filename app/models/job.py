@@ -22,7 +22,7 @@ class SynthesisPlanRequest(BaseModel):
     optimisation_dimension: OptimisationDimension = OptimisationDimension.FEWEST_STEPS
     max_routes: int = Field(5, ge=1, le=10)
     max_depth: int = Field(6, ge=1, le=10, description="Maximum retrosynthetic depth")
-    tenant_id: str = Field(..., description="Tenant identifier for data isolation")
+    tenant_id: str = Field("", description="Tenant identifier — injected from X-Tenant-Id header, not supplied in request body")
 
 
 class JobStatusResponse(BaseModel):
