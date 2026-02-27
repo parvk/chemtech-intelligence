@@ -1,0 +1,22 @@
+.env
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+dist/
+build/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+htmlcov/
+.coverage
+*.log
+
+# Data files (large binaries)
+data/*.hdf5
+data/*.pkl
+data/*.bin
+
+# Model checkpoints
+models/checkpoints/

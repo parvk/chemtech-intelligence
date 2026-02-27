@@ -1,0 +1,53 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8001:8001"
+    env_file: .env
+    depends_on:
+      - redis
+      - postgres
+    volumes:
+      - ./app:/app/app
+      - ./data:/app/data
+      - ./config:/app/config
+
+  worker:
+    build: .
+    command: celery -A app.workers.celery_app worker --loglevel=info --concurrency=1
+    env_file: .env
+    depends_on:
+      - redis
+      - postgres
+    volumes:
+      - ./app:/app/app
+      - ./data:/app/data
+      - ./config:/app/config
+
+  flower:
+    build: .
+    command: celery -A app.workers.celery_app flower --port=5555
+    ports:
+      - "5555:5555"
+    env_file: .env
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: chemflow
+      POSTGRES_PASSWORD: chemflow
+      POSTGRES_DB: chemflow_intelligence
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
