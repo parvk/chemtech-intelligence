@@ -2,6 +2,8 @@
 Stage 3 — Route Scoring
 Multi-dimensional evaluation of candidate routes.
 Phase 1: SA Score, Route Maturity, Green Index (basic), Scale-Up (proxy), Cost Index (reference), REACH/GHS.
+
+STUB: all _compute_* methods return mock values. Replace with real implementations.
 """
 import httpx
 from app.core.config import settings
@@ -45,28 +47,28 @@ class ScoringService:
 
     def _compute_sa_score(self, smiles: str) -> float | None:
         # TODO: from rdkit.Chem import RDConfig; SA Score via Ertl & Schuffenhauer
-        raise NotImplementedError
+        return 2.8  # STUB: mock score (1=easy, 10=hard)
 
     def _compute_route_maturity(self, route: SynthesisRoute) -> float | None:
         # TODO: score based on literature precedent (reaction template coverage in USPTO/ORD)
-        raise NotImplementedError
+        return round(0.5 + 0.1 * min(route.step_count, 4), 2)  # STUB: fewer steps → slightly higher maturity proxy
 
     def _compute_green_index(self, route: SynthesisRoute) -> float | None:
         # TODO: atom economy + CHEM21/GSK solvent guide + E-factor calculation
-        raise NotImplementedError
+        return round(70.0 - route.step_count * 5.0, 1)  # STUB: penalise longer routes
 
     def _compute_scale_up_proxy(self, route: SynthesisRoute) -> float | None:
         # TODO: tag-matching against known scale-up challenge patterns
         # (exotherms, gas evolution, cryogenic, high-pressure)
-        raise NotImplementedError
+        return 0.75  # STUB
 
     def _compute_cost_index(self, smiles_list: list[str]) -> float | None:
         # TODO: reference price table lookup per reagent SMILES
-        raise NotImplementedError
+        return round(1.5 + len(smiles_list) * 0.3, 2)  # STUB: more reagents → higher cost
 
     async def _check_reach_ghs(self, smiles_list: list[str]) -> tuple[bool | None, list[str]]:
         # TODO: ECHA API + PubChem GHS classification per reagent
-        raise NotImplementedError
+        return True, []  # STUB: assume compliant, no flags
 
     def _collect_all_smiles(self, route: SynthesisRoute) -> list[str]:
         smiles = set()
