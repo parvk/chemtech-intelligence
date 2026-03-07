@@ -5,6 +5,21 @@ from app.models.molecule import OptimisationDimension
 from app.models.route import ReactionStep, RouteScores, SynthesisRoute
 
 
+def pytest_addoption(parser):
+    parser.addoption(
+        "--smiles",
+        action="store",
+        default=None,
+        help="Target SMILES string for smoke/integration tests (overrides the default test molecule)",
+    )
+
+
+@pytest.fixture
+def target_smiles(request):
+    """SMILES to use in smoke tests — pass via --smiles or falls back to aspirin."""
+    return request.config.getoption("--smiles") or "CC(=O)Oc1ccccc1C(=O)O"
+
+
 @pytest.fixture
 def client():
     return AsyncClient(transport=ASGITransport(app=app), base_url="http://test")

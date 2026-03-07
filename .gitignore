@@ -14,9 +14,7 @@ htmlcov/
 *.log
 
 # Data files (large binaries)
-data/*.hdf5
-data/*.pkl
-data/*.bin
+data/
 
 # Model checkpoints
 models/checkpoints/

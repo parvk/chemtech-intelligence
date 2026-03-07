@@ -33,7 +33,10 @@ dependencies = [
     "alembic>=1.13.0",
 
     # Chemistry
-    "rdkit>=2024.3.1",
+    # rdkit pinned to range compatible with aizynthfinder (<2024.0.0 required by aizynthfinder 4.x)
+    "rdkit>=2023.9.1,<2024.0.0",
+    "aizynthfinder>=4.2.0",
+    # onnxruntime intentionally omitted — aizynthfinder pins its own compatible version
 
     # AI / LLM
     "anthropic>=0.28.0",

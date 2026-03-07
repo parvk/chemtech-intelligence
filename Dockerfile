@@ -5,10 +5,11 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
-# System deps for RDKit and chemistry libs
+# System deps for RDKit, AiZynthFinder, and ONNX Runtime
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libxrender1 \
     libxext6 \
+    libgomp1 \
     postgresql-client \
     curl \
     && rm -rf /var/lib/apt/lists/*
@@ -17,12 +18,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Stub app/ so hatchling can resolve the package without the full source
 COPY pyproject.toml .
 RUN mkdir -p app && touch app/__init__.py
-RUN pip install --no-cache-dir -e .
+RUN pip install --no-cache-dir -e . && pip uninstall -y numba || true
 
 # Now copy the full source (invalidates cache only when source changes)
 COPY . .
 COPY scripts/entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+RUN chmod +x /entrypoint.sh && chmod +x /app/scripts/download_models.sh
 
 # ─── Development stage ────────────────────────────────────────────────────────
 FROM base AS development
