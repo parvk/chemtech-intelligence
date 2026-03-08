@@ -8,7 +8,9 @@
 | `test_health.py` | `/health` and `/docs` endpoints | None |
 | `test_molecule_service.py` | Stage 1 — molecule resolution, format detection, PubChem lookup | PubChem (mocked in unit tests) |
 | `test_retrosynthesis_service.py` | Stage 2 — AiZynthFinder integration, route parsing, OOD detection | AiZynthFinder models (mocked in unit tests) |
+| `test_scoring_service.py` | Stage 3 — SA Score, Green Index, Route Maturity, REACH/GHS | PubChem (mocked in unit tests) |
 | `test_ranking.py` | Stage 4 — route ranking across all optimisation dimensions | None |
+| `test_explainability_service.py` | Stage 5 — rationale generation, Claude API, fallback | Claude API (mocked in unit tests) |
 | `test_synthesis_api.py` | API layer — `/synthesis/plan` and `/synthesis/jobs/{id}` endpoints | None (Celery mocked) |
 
 Tests are split into two tiers by marker:
