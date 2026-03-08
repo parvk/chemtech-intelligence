@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     # Anthropic
     anthropic_api_key: str = ""
     anthropic_model: str = "claude-opus-4-6"
+    anthropic_max_tokens: int = 400
 
     # PubChem
     pubchem_base_url: str = "https://pubchem.ncbi.nlm.nih.gov/rest/pug"

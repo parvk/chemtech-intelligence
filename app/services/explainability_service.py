@@ -3,8 +3,11 @@ Stage 5 — Explainability Layer
 Generates natural language rationale for routes and steps via Claude API.
 Falls back to template-based generation on timeout or API error.
 """
+import asyncio
+
 import anthropic
-from tenacity import retry, stop_after_attempt, wait_exponential
+from anthropic import APIConnectionError, APIStatusError
+from tenacity import retry, retry_if_exception_type, stop_after_attempt, wait_exponential
 
 from app.core.config import settings
 from app.core.logging import get_logger
@@ -37,15 +40,21 @@ class ExplainabilityService:
         routes: list[SynthesisRoute],
         target_smiles: str,
     ) -> list[SynthesisRoute]:
-        for route in routes:
+        async def enrich_one(route: SynthesisRoute) -> None:
             try:
                 route.rationale = await self._generate_route_rationale(route, target_smiles)
             except Exception as e:
                 logger.warning("rationale_generation_failed", route_id=route.route_id, error=str(e))
                 route.rationale = self._template_fallback(route)
+
+        await asyncio.gather(*[enrich_one(r) for r in routes])
         return routes
 
-    @retry(stop=stop_after_attempt(2), wait=wait_exponential(multiplier=1, min=2, max=8))
+    @retry(
+        retry=retry_if_exception_type((APIStatusError, APIConnectionError)),
+        stop=stop_after_attempt(2),
+        wait=wait_exponential(multiplier=1, min=2, max=8),
+    )
     async def _generate_route_rationale(self, route: SynthesisRoute, target_smiles: str) -> str:
         route_summary = self._format_route_summary(route)
         prompt = ROUTE_RATIONALE_PROMPT.format(
@@ -60,7 +69,7 @@ class ExplainabilityService:
 
         message = await self._client.messages.create(
             model=self._model,
-            max_tokens=400,
+            max_tokens=settings.anthropic_max_tokens,
             messages=[{"role": "user", "content": prompt}],
         )
         return message.content[0].text
