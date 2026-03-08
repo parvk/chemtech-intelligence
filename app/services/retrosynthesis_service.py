@@ -34,7 +34,8 @@ except ImportError:
     )
 
 # Tanimoto similarity below which we flag a molecule as potentially out-of-domain
-_OOD_SIMILARITY_THRESHOLD = 0.3
+# Configurable via OOD_SIMILARITY_THRESHOLD env var
+_OOD_SIMILARITY_THRESHOLD = settings.ood_similarity_threshold
 
 # Reference Morgan fingerprints for OOD check.
 # Phase 1: small representative set of common building blocks.

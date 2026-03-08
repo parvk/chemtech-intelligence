@@ -203,7 +203,7 @@ class MoleculeService:
 
     async def _pubchem_fetch(self, namespace: str, identifier: str) -> dict:
         url = f"{self._pubchem_base}/compound/{namespace}/{identifier}/property/{PUBCHEM_PROPERTIES}/JSON"
-        async with httpx.AsyncClient(timeout=10.0) as client:
+        async with httpx.AsyncClient(timeout=settings.pubchem_request_timeout) as client:
             try:
                 response = await client.get(url)
             except httpx.RequestError as e:
@@ -244,7 +244,7 @@ class MoleculeService:
             "pubchem_cid": props.get("CID"),
             "iupac_name": props.get("IUPACName") or base.iupac_name,
             "structure_image_url": (
-                f"https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/cid/{props['CID']}/PNG"
+                f"{settings.pubchem_base_url}/compound/cid/{props['CID']}/PNG"
                 if props.get("CID") else None
             ),
         })

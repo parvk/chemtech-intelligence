@@ -24,6 +24,8 @@ class Settings(BaseSettings):
 
     # PubChem
     pubchem_base_url: str = "https://pubchem.ncbi.nlm.nih.gov/rest/pug"
+    pubchem_view_base_url: str = "https://pubchem.ncbi.nlm.nih.gov/rest/pug_view"
+    pubchem_request_timeout: float = 15.0
 
     # ECHA
     echa_api_base_url: str = "https://iuclid6.echa.europa.eu/api"
@@ -31,6 +33,7 @@ class Settings(BaseSettings):
     # AiZynthFinder
     aizynthfinder_config_path: str = "/app/config/aizynthfinder.yml"
     aizynthfinder_stock_file: str = "/app/data/zinc_stock.hdf5"
+    ood_similarity_threshold: float = 0.3
 
     # Job Settings
     job_timeout_seconds: int = 180
