@@ -1,7 +1,7 @@
 """
-Tests for Stage 2 — Retrosynthesis Inference (RetrosynthesisService).
+Tests for Stage 2 - Retrosynthesis Inference (RetrosynthesisService).
 
-Unit tests mock AiZynthFinder entirely — no models or GPU required.
+Unit tests mock AiZynthFinder entirely - no models or GPU required.
 Integration tests (marked integration) require models downloaded via:
     bash scripts/download_models.sh
 Run without integration tests:
@@ -102,7 +102,7 @@ TWO_STEP_TREE = {
 }
 
 STOCK_TREE = {
-    # Target is already in stock — no reactions, tree has no children
+    # Target is already in stock - no reactions, tree has no children
     "type": "mol",
     "smiles": "CCO",
     "in_stock": True,
@@ -244,7 +244,7 @@ class TestParseRouteTree:
         assert steps[0].reaction_class is None
 
     def test_stock_molecule_returns_no_steps(self, svc):
-        # Target already in stock — no retrosynthetic steps
+        # Target already in stock - no retrosynthetic steps
         steps = svc._parse_route_tree(STOCK_TREE)
         assert steps == []
 
@@ -280,7 +280,7 @@ class TestOutOfDomainDetection:
         assert similarity == pytest.approx(1.0)
 
     def test_common_building_block_is_in_domain(self, svc):
-        is_ood, _ = svc._check_out_of_domain("CCO")  # ethanol — in reference set
+        is_ood, _ = svc._check_out_of_domain("CCO")  # ethanol - in reference set
         assert not is_ood
 
     def test_very_exotic_molecule_is_out_of_domain(self, svc):
@@ -345,7 +345,7 @@ class TestExtractRoutes:
         assert "0.18" in routes[0].out_of_domain_warning
 
     def test_route_with_no_steps_skipped(self, svc):
-        # STOCK_TREE produces no steps — should be skipped
+        # STOCK_TREE produces no steps - should be skipped
         finder = make_mock_finder([STOCK_TREE, ONE_STEP_TREE])
         routes = svc._extract_routes(finder, out_of_domain=False, ood_similarity=0.9, max_routes=10)
         assert len(routes) == 1
@@ -435,7 +435,7 @@ class TestRetrosynthesisIntegration:
     @pytest.mark.asyncio
     async def test_aspirin_returns_routes(self):
         svc = RetrosynthesisService()
-        # Aspirin (2-acetoxybenzoic acid) — well-known pharma molecule, should be in USPTO training data
+        # Aspirin (2-acetoxybenzoic acid) - well-known pharma molecule, should be in USPTO training data
         routes = await svc.run("CC(=O)Oc1ccccc1C(=O)O", max_routes=5)
         assert len(routes) > 0
 
@@ -469,7 +469,7 @@ class TestRetrosynthesisIntegration:
         assert RetrosynthesisService._instance is instance_after_first
 
 
-# ── Smoke test — run a real synthesis and print structured output ──────────────
+# ── Smoke test - run a real synthesis and print structured output ──────────────
 #
 # Usage (run inside the worker container where models are available):
 #
@@ -484,7 +484,7 @@ class TestRetrosynthesisIntegration:
 class TestRetrosynthesisSmoke:
     """
     End-to-end smoke test: SMILES → structured SynthesisRoute objects.
-    Prints a full human-readable summary — run with -s to see output.
+    Prints a full human-readable summary - run with -s to see output.
     """
 
     @pytest.mark.asyncio
@@ -497,7 +497,7 @@ class TestRetrosynthesisSmoke:
 
         routes = await svc.run(target_smiles, max_routes=5, max_depth=6)
 
-        assert routes, f"No routes found for {target_smiles!r} — check models are downloaded"
+        assert routes, f"No routes found for {target_smiles!r} - check models are downloaded"
 
         for i, route in enumerate(routes, 1):
             print(f"Route {i}  (id: {route.route_id[:8]}…)")

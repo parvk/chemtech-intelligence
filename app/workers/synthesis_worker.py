@@ -1,6 +1,6 @@
 """
 Celery task orchestrating the full 6-stage synthesis planning pipeline.
-Runs asynchronously — the API submits this task and returns a job_id immediately.
+Runs asynchronously - the API submits this task and returns a job_id immediately.
 """
 import asyncio
 from datetime import datetime, UTC
@@ -67,7 +67,7 @@ def run_synthesis_plan(self, request_dict: dict) -> dict:
 
         for route in candidate_routes:
             if route.out_of_domain:
-                warnings.append(f"Route {route.route_id}: molecule may be out of training distribution — review with caution.")
+                warnings.append(f"Route {route.route_id}: molecule may be out of training distribution - review with caution.")
 
         # Stage 3
         _update_state(self, JobStatus.SCORING, "Scoring routes", 60)

@@ -8,7 +8,7 @@ packages = ["app"]
 [project]
 name = "chemtech-intelligence"
 version = "0.1.0"
-description = "ChemFlow AI inference service — retrosynthesis, scoring, and explainability"
+description = "Dxtr AI inference service - retrosynthesis, scoring, and explainability"
 requires-python = ">=3.11"
 
 dependencies = [
@@ -36,7 +36,7 @@ dependencies = [
     # rdkit pinned to range compatible with aizynthfinder (<2024.0.0 required by aizynthfinder 4.x)
     "rdkit>=2023.9.1,<2024.0.0",
     "aizynthfinder>=4.2.0",
-    # onnxruntime intentionally omitted — aizynthfinder pins its own compatible version
+    # onnxruntime intentionally omitted - aizynthfinder pins its own compatible version
 
     # AI / LLM
     "anthropic>=0.28.0",
@@ -68,7 +68,7 @@ select = ["E", "F", "I", "UP"]
 asyncio_mode = "auto"
 testpaths = ["tests"]
 markers = [
-    "integration: hits real external APIs — skip in CI with -m 'not integration'",
+    "integration: hits real external APIs - skip in CI with -m 'not integration'",
 ]
 
 [tool.mypy]

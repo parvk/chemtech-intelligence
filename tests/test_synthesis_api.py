@@ -1,6 +1,6 @@
 """
 Tests for Stage synthesis planning API endpoints.
-Celery task execution is mocked — these test the API layer only.
+Celery task execution is mocked - these test the API layer only.
 """
 import pytest
 from unittest.mock import MagicMock, patch

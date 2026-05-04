@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "==> ChemFlow Intelligence starting (env: ${APP_ENV:-development})"
+echo "==> Dxtr Intelligence starting (env: ${APP_ENV:-development})"
 
 # Wait for postgres (belt-and-suspenders on top of healthcheck)
 if [ -n "$DATABASE_URL" ]; then

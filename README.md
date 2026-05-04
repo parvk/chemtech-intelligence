@@ -1,4 +1,4 @@
-# ChemFlow Intelligence Service
+# Dxtr Intelligence Service
 
 AI inference service for retrosynthesis, route scoring, and explainability.
 
@@ -70,7 +70,7 @@ docker compose restart worker
 # Run all tests (includes live PubChem integration calls)
 docker exec chemflow_intelligence_api pytest tests/ -v
 
-# Unit tests only — offline, safe for CI
+# Unit tests only - offline, safe for CI
 docker exec chemflow_intelligence_api pytest tests/ -v -m "not integration"
 
 # Single test file
@@ -89,9 +89,9 @@ docker exec chemflow_intelligence_api pytest tests/ -m "not integration" --cov=a
 |------|-------|---------------|
 | `test_health.py` | Health, docs, OpenAPI schema | None |
 | `test_schemas.py` | Pydantic model validation, field bounds, enums | None |
-| `test_ranking.py` | Stage 4 — ranking logic, composite scores, top-N | None |
-| `test_molecule_service.py` | Stage 1 — molecule resolution (all input formats) | PubChem (integration only) |
-| `test_synthesis_api.py` | API layer — job submit, status polling, result retrieval | None (Celery mocked) |
+| `test_ranking.py` | Stage 4 - ranking logic, composite scores, top-N | None |
+| `test_molecule_service.py` | Stage 1 - molecule resolution (all input formats) | PubChem (integration only) |
+| `test_synthesis_api.py` | API layer - job submit, status polling, result retrieval | None (Celery mocked) |
 
 ### Marks
 
@@ -106,11 +106,11 @@ docker exec chemflow_intelligence_api pytest tests/ -m "not integration" --cov=a
 
 | Service    | Container Port | Host Port | Notes                          |
 |------------|---------------|-----------|--------------------------------|
-| API        | 8001          | **8001**  | FastAPI — http://localhost:8001 |
+| API        | 8001          | **8001**  | FastAPI - http://localhost:8001 |
 | Postgres   | 5432          | **5434**  | Offset to avoid conflict with chemtech-be (5433) |
 | Redis      | 6379          | **6380**  | Offset to avoid conflict        |
-| Flower     | 5555          | **5555**  | Job monitor — `--profile tools` only |
-| pgAdmin    | 80            | **5051**  | DB UI — `--profile tools` only  |
+| Flower     | 5555          | **5555**  | Job monitor - `--profile tools` only |
+| pgAdmin    | 80            | **5051**  | DB UI - `--profile tools` only  |
 
 > In production, Postgres and Redis ports are not exposed outside the container network.
 

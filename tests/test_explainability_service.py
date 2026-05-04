@@ -1,8 +1,8 @@
 """
-Tests for Stage 5 — Explainability Layer (ExplainabilityService).
+Tests for Stage 5 - Explainability Layer (ExplainabilityService).
 
-Unit tests mock the Claude API — no API key required.
-Integration tests (marked integration) hit the real Claude API — skip in CI with:
+Unit tests mock the Claude API - no API key required.
+Integration tests (marked integration) hit the real Claude API - skip in CI with:
     pytest -m "not integration"
 """
 import pytest
@@ -17,7 +17,7 @@ from tests.conftest import make_route, make_step
 @pytest.fixture
 def svc():
     svc = ExplainabilityService()
-    # Replace the real client with a mock — no network calls in unit tests
+    # Replace the real client with a mock - no network calls in unit tests
     svc._client = MagicMock()
     return svc
 
@@ -140,7 +140,7 @@ class TestGenerateRouteRationale:
 
     @pytest.mark.asyncio
     async def test_value_error_not_retried_propagates(self, svc):
-        """ValueError is not a transient API error — must propagate immediately."""
+        """ValueError is not a transient API error - must propagate immediately."""
         svc._client.messages.create = AsyncMock(side_effect=ValueError("bad data"))
         with pytest.raises(ValueError):
             await svc._generate_route_rationale(make_route(), "c1ccccc1")
@@ -217,7 +217,7 @@ class TestEnrichRoutes:
 
     @pytest.mark.asyncio
     async def test_routes_enriched_in_parallel(self, svc):
-        """All routes should be enriched (asyncio.gather) — no route left without rationale."""
+        """All routes should be enriched (asyncio.gather) - no route left without rationale."""
         svc._client.messages.create = AsyncMock(return_value=mock_response("ok"))
         routes = [make_route(f"r{i}") for i in range(5)]
         enriched = await svc.enrich_routes(routes, "c1ccccc1")
@@ -225,7 +225,7 @@ class TestEnrichRoutes:
         assert svc._client.messages.create.call_count == 5
 
 
-# ─── Integration (real Claude API — skip in CI) ───────────────────────────────
+# ─── Integration (real Claude API - skip in CI) ───────────────────────────────
 
 @pytest.mark.integration
 class TestExplainabilityIntegration:

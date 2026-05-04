@@ -1,5 +1,5 @@
 """
-Tests for Stage 4 — Ranking & Filtering.
+Tests for Stage 4 - Ranking & Filtering.
 Pure computation, no external dependencies.
 """
 import pytest

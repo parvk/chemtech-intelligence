@@ -16,7 +16,7 @@ def pytest_addoption(parser):
 
 @pytest.fixture
 def target_smiles(request):
-    """SMILES to use in smoke tests — pass via --smiles or falls back to aspirin."""
+    """SMILES to use in smoke tests - pass via --smiles or falls back to aspirin."""
     return request.config.getoption("--smiles") or "CC(=O)Oc1ccccc1C(=O)O"
 
 

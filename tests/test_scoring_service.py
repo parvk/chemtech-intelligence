@@ -1,8 +1,8 @@
 """
-Tests for Stage 3 — Route Scoring (ScoringService).
+Tests for Stage 3 - Route Scoring (ScoringService).
 
 Unit tests mock PubChem so they run offline.
-Integration tests (marked integration) hit the real PubChem API — skip in CI with:
+Integration tests (marked integration) hit the real PubChem API - skip in CI with:
     pytest -m "not integration"
 """
 import pytest
@@ -53,7 +53,7 @@ def make_route_from_steps(steps: list[ReactionStep], route_id: str = "r1") -> Sy
 
 class TestSAScore:
     def test_benzene_score_is_low(self, svc):
-        """Benzene is trivially synthesisable — SA Score should be close to 1."""
+        """Benzene is trivially synthesisable - SA Score should be close to 1."""
         if not scoring_module._SASCORER_AVAILABLE:
             pytest.skip("sascorer not installed")
         score = svc._compute_sa_score("c1ccccc1")
@@ -113,7 +113,7 @@ class TestRouteMaturity:
         assert maturity < 0.5
 
     def test_zero_confidence_clamped_does_not_error(self, svc):
-        """Confidence of 0.0 is clamped to 1e-9 — must not raise or return None."""
+        """Confidence of 0.0 is clamped to 1e-9 - must not raise or return None."""
         route = make_route_from_steps([make_step_ex(confidence=0.0)])
         result = svc._compute_route_maturity(route)
         assert result is not None
@@ -132,7 +132,7 @@ class TestGreenIndex:
     def test_diels_alder_is_100_percent(self, svc):
         """
         Diels-Alder addition: butadiene + ethylene → cyclohexene.
-        All atoms incorporated — atom economy = 100%.
+        All atoms incorporated - atom economy = 100%.
         """
         step = make_step_ex(reactants=["C=CC=C", "C=C"], product="C1CC=CCC1")
         route = make_route_from_steps([step])
@@ -142,7 +142,7 @@ class TestGreenIndex:
     def test_esterification_below_100_percent(self, svc):
         """
         Esterification: acetic acid + ethanol → ethyl acetate.
-        Water is lost — AE < 100%.
+        Water is lost - AE < 100%.
         """
         step = make_step_ex(
             reactants=["CC(=O)O", "CCO"],  # acetic acid + ethanol
@@ -278,7 +278,7 @@ class TestReachGHS:
 
     @pytest.mark.asyncio
     async def test_novel_compound_no_flags_is_compliant(self, svc):
-        """Unknown compound (not in PubChem) returns [] — treated as compliant, no flags."""
+        """Unknown compound (not in PubChem) returns [] - treated as compliant, no flags."""
         with patch.object(svc, "_fetch_ghs_hcodes", new=AsyncMock(return_value=[])):
             compliant, hcodes = await svc._check_reach_ghs(["CC(C)(C)c1ccc(O)cc1"])
         assert compliant is True
@@ -333,7 +333,7 @@ class TestExtractHCodes:
 
     def test_does_not_match_partial_patterns(self):
         from app.services.scoring_service import _extract_hcodes
-        # "H3150" or "1H315" should not match — word boundary required
+        # "H3150" or "1H315" should not match - word boundary required
         result = _extract_hcodes("H3150 prefix-H315-suffix")
         assert "H3150" not in result
 
@@ -378,7 +378,7 @@ class TestScoreRoutes:
         assert scored[0].scores.scale_up_readiness == 0.75
 
 
-# ─── Integration (real PubChem — skip in CI) ──────────────────────────────────
+# ─── Integration (real PubChem - skip in CI) ──────────────────────────────────
 
 @pytest.mark.integration
 class TestScoringIntegration:

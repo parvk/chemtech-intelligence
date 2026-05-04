@@ -44,7 +44,7 @@ services:
         limits:
           memory: 4g   # GPU/model inference headroom
 
-  # Flower not exposed in production — access via internal tooling only
+  # Flower not exposed in production - access via internal tooling only
   flower:
     profiles:
       - internal-tools

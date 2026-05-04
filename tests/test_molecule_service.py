@@ -1,8 +1,8 @@
 """
-Tests for Stage 1 — Molecule Resolution.
+Tests for Stage 1 - Molecule Resolution.
 
 Unit tests mock PubChem so they run offline.
-Integration tests (marked integration) hit the real PubChem API — skip in CI with:
+Integration tests (marked integration) hit the real PubChem API - skip in CI with:
     pytest -m "not integration"
 """
 import pytest
@@ -35,7 +35,7 @@ PUBCHEM_ETHANOL = {
     "InChIKey": ETHANOL_INCHIKEY,
 }
 
-CHIRAL_SMILES = "C[C@@H](O)F"  # (S)-1-fluoroethanol — one chiral centre
+CHIRAL_SMILES = "C[C@@H](O)F"  # (S)-1-fluoroethanol - one chiral centre
 
 
 @pytest.fixture
@@ -62,7 +62,7 @@ class TestFormatDetection:
         assert detect_format("1234567-89-0") == InputFormat.CAS  # max digits
 
     def test_cas_wrong_format_not_detected(self):
-        # not a valid CAS pattern — falls through to name
+        # not a valid CAS pattern - falls through to name
         assert detect_format("1-2-3-4") == InputFormat.PLAIN_LANGUAGE
 
     def test_smiles_with_special_chars_detected(self):
@@ -254,7 +254,7 @@ class TestPubChemNameLookup:
 # ── ResolvedMolecule contract ─────────────────────────────────────────────────
 
 class TestResolvedMoleculeContract:
-    """canonical_smiles must always be populated — that is the Stage 1 contract."""
+    """canonical_smiles must always be populated - that is the Stage 1 contract."""
 
     @pytest.mark.asyncio
     async def test_smiles_always_present_for_smiles_input(self, svc):
@@ -276,7 +276,7 @@ class TestResolvedMoleculeContract:
         assert result.canonical_smiles
 
 
-# ── Integration tests (real PubChem — skip in CI) ─────────────────────────────
+# ── Integration tests (real PubChem - skip in CI) ─────────────────────────────
 
 @pytest.mark.integration
 class TestPubChemIntegration:

@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # Download AiZynthFinder pre-trained models and stock files.
-# Run this once before starting the worker — or bake into a Docker build step.
+# Run this once before starting the worker - or bake into a Docker build step.
 #
 # Downloads to ./data/ (mounted into the container at /app/data/):
-#   data/models/uspto_model.onnx       — expansion policy network
-#   data/models/uspto_templates.hdf5   — reaction template library
-#   data/models/filter_model.onnx      — feasibility filter network
-#   data/stocks/zinc_stock.hdf5        — ZINC building blocks stock file
+#   data/models/uspto_model.onnx       - expansion policy network
+#   data/models/uspto_templates.hdf5   - reaction template library
+#   data/models/filter_model.onnx      - feasibility filter network
+#   data/stocks/zinc_stock.hdf5        - ZINC building blocks stock file
 #
 # Usage:
 #   ./scripts/download_models.sh               # downloads to ./data/
@@ -30,7 +30,7 @@ echo "==> Downloading AiZynthFinder public models to: $DOWNLOAD_DIR"
 python -m aizynthfinder.tools.download_public_data "$DOWNLOAD_DIR"
 
 # Move only the zinc stock file into stocks/ subdirectory.
-# All model files stay flat in $DOWNLOAD_DIR — matching config/aizynthfinder.yml paths.
+# All model files stay flat in $DOWNLOAD_DIR - matching config/aizynthfinder.yml paths.
 echo "==> Organising downloaded files..."
 
 for f in zinc_stock.hdf5; do

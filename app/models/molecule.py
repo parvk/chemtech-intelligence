@@ -19,13 +19,13 @@ class OptimisationDimension(str, Enum):
 
 
 class MoleculeInput(BaseModel):
-    value: str = Field(..., description="Molecule identifier — SMILES, CAS, IUPAC name, or plain language description")
+    value: str = Field(..., description="Molecule identifier - SMILES, CAS, IUPAC name, or plain language description")
     format: InputFormat | None = Field(
         None,
         description=(
             "Format of the input value. "
             "If omitted, format is auto-detected. "
-            "Auto-detection fails loudly on ambiguous input — provide format explicitly to override."
+            "Auto-detection fails loudly on ambiguous input - provide format explicitly to override."
         ),
     )
 

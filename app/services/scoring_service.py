@@ -1,5 +1,5 @@
 """
-Stage 3 — Route Scoring
+Stage 3 - Route Scoring
 Multi-dimensional evaluation of candidate routes.
 Phase 1: SA Score, Route Maturity, Green Index (basic), Scale-Up (proxy), Cost Index (reference), REACH/GHS.
 
@@ -109,7 +109,7 @@ class ScoringService:
     def _compute_route_maturity(self, route: SynthesisRoute) -> float | None:
         """
         Geometric mean of per-step confidences from AiZynthFinder's filter policy.
-        Confidence encodes template feasibility vs. the USPTO/ORD training corpus —
+        Confidence encodes template feasibility vs. the USPTO/ORD training corpus -
         a natural proxy for literature precedent.
         Phase 2: layer in reaction-class tier adjustments (named reactions → bonus,
         obscure templates → penalty).
@@ -187,7 +187,7 @@ class ScoringService:
 
             cid = await self._pubchem_get_cid(client, inchikey)
             if cid is None:
-                return []  # Not in PubChem — novel/proprietary, no flags
+                return []  # Not in PubChem - novel/proprietary, no flags
 
             return await self._pubchem_get_hcodes(client, cid)
 

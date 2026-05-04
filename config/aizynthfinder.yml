@@ -1,4 +1,4 @@
-# AiZynthFinder Configuration — ChemFlow Intelligence Service
+# AiZynthFinder Configuration - Dxtr Intelligence Service
 # Phase 1: USPTO pre-trained models (pharma-biased baseline)
 # Phase 2: Add specialty chemical fine-tuned models alongside uspto
 
@@ -6,10 +6,10 @@ finder:
   properties:
     # Retrosynthesis tree depth (max reaction steps)
     max_transforms: 6
-    # MCTS iterations — trade-off: quality vs. latency
+    # MCTS iterations - trade-off: quality vs. latency
     # 100 = ~30–60s; 200 = ~60–120s on CPU; reduce for dev
     iteration_limit: 100
-    # Hard timeout — aligns with our 180s pipeline budget
+    # Hard timeout - aligns with our 180s pipeline budget
     time_limit: 120
     # Return as soon as a route is found (false = exhaustive search up to limits)
     return_first: false

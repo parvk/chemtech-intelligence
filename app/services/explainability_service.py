@@ -1,5 +1,5 @@
 """
-Stage 5 — Explainability Layer
+Stage 5 - Explainability Layer
 Generates natural language rationale for routes and steps via Claude API.
 Falls back to template-based generation on timeout or API error.
 """
@@ -27,7 +27,7 @@ Scores:
 - Green Index: {green_index}%
 - REACH Compliant: {reach_compliant}
 
-Write a concise (3–5 sentence) rationale for this route: why it is viable, what its key strengths are, and what risks a chemist should be aware of. Be direct and technically specific. If there are uncertainties, state them explicitly — do not overstate confidence."""
+Write a concise (3–5 sentence) rationale for this route: why it is viable, what its key strengths are, and what risks a chemist should be aware of. Be direct and technically specific. If there are uncertainties, state them explicitly - do not overstate confidence."""
 
 
 class ExplainabilityService:
@@ -78,7 +78,7 @@ class ExplainabilityService:
         sa = f"{route.scores.sa_score:.1f}" if route.scores.sa_score else "N/A"
         return (
             f"This {route.step_count}-step route has an SA Score of {sa}. "
-            f"Rationale generation was unavailable — review step details and scores manually."
+            f"Rationale generation was unavailable - review step details and scores manually."
         )
 
     def _format_route_summary(self, route: SynthesisRoute) -> str:

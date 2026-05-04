@@ -1,5 +1,5 @@
 """
-Stage 2 — Retrosynthesis Inference
+Stage 2 - Retrosynthesis Inference
 MCTS-guided retrosynthetic search via AiZynthFinder.
 Phase 1: AiZynthFinder with USPTO pre-trained models.
 Phase 2 migration path: swap expansion policy for specialty-chemical fine-tuned model.
@@ -30,7 +30,7 @@ except ImportError:
     AIZYNTHFINDER_AVAILABLE = False
     logger.warning(
         "aizynthfinder_unavailable",
-        message="aizynthfinder not installed — retrosynthesis will fail at runtime",
+        message="aizynthfinder not installed - retrosynthesis will fail at runtime",
     )
 
 # Tanimoto similarity below which we flag a molecule as potentially out-of-domain
@@ -135,7 +135,7 @@ class RetrosynthesisService:
         out_of_domain: bool,
         ood_similarity: float,
     ) -> list[SynthesisRoute]:
-        """Blocking AiZynthFinder call — runs in a thread executor."""
+        """Blocking AiZynthFinder call - runs in a thread executor."""
         finder = self._get_finder()
 
         with self._lock:
@@ -179,7 +179,7 @@ class RetrosynthesisService:
                     ood_warning = (
                         f"Target molecule has low similarity to training data "
                         f"(max Tanimoto: {ood_similarity:.2f}). "
-                        "Route quality may be reduced — review with caution."
+                        "Route quality may be reduced - review with caution."
                     )
 
                 synthesis_routes.append(

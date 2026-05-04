@@ -17,6 +17,6 @@ celery_app.conf.update(
     task_track_started=True,
     task_time_limit=settings.job_timeout_seconds + 30,
     task_soft_time_limit=settings.job_timeout_seconds,
-    worker_prefetch_multiplier=1,  # one task at a time — GPU contention
+    worker_prefetch_multiplier=1,  # one task at a time - GPU contention
     task_acks_late=True,
 )

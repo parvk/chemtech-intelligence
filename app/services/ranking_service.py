@@ -1,7 +1,7 @@
 """
-Stage 4 — Ranking & Filtering
+Stage 4 - Ranking & Filtering
 Re-ranks scored routes by selected optimisation dimension.
-Re-rank is pure computation — no re-inference needed (< 1s).
+Re-rank is pure computation - no re-inference needed (< 1s).
 """
 from app.core.logging import get_logger
 from app.models.molecule import OptimisationDimension
@@ -104,7 +104,7 @@ class RankingService:
         if val is None:
             return MISSING_SCORE_PENALTY
         if range_tuple is None:
-            return 1.0  # only one route — trivially best
+            return 1.0  # only one route - trivially best
         min_val, max_val = range_tuple
         if max_val == min_val:
             return 1.0

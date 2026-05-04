@@ -27,5 +27,5 @@ async def test_openapi_json_available():
         response = await client.get("/openapi.json")
     assert response.status_code == 200
     schema = response.json()
-    assert schema["info"]["title"] == "ChemFlow Intelligence API"
+    assert schema["info"]["title"] == "Dxtr Intelligence API"
     assert "/api/v1/synthesis/plan" in schema["paths"]

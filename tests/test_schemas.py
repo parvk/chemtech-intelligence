@@ -1,5 +1,5 @@
 """
-Tests for Pydantic schema validation — input contracts, field constraints, enums.
+Tests for Pydantic schema validation - input contracts, field constraints, enums.
 These run with no external dependencies.
 """
 import pytest

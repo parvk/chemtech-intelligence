@@ -1,4 +1,4 @@
-# Testing — chemtech-intelligence
+# Testing - chemtech-intelligence
 
 ## Overview
 
@@ -6,17 +6,17 @@
 |---|---|---|
 | `test_schemas.py` | Pydantic model validation, field constraints, enums | None |
 | `test_health.py` | `/health` and `/docs` endpoints | None |
-| `test_molecule_service.py` | Stage 1 — molecule resolution, format detection, PubChem lookup | PubChem (mocked in unit tests) |
-| `test_retrosynthesis_service.py` | Stage 2 — AiZynthFinder integration, route parsing, OOD detection | AiZynthFinder models (mocked in unit tests) |
-| `test_scoring_service.py` | Stage 3 — SA Score, Green Index, Route Maturity, REACH/GHS | PubChem (mocked in unit tests) |
-| `test_ranking.py` | Stage 4 — route ranking across all optimisation dimensions | None |
-| `test_explainability_service.py` | Stage 5 — rationale generation, Claude API, fallback | Claude API (mocked in unit tests) |
-| `test_synthesis_api.py` | API layer — `/synthesis/plan` and `/synthesis/jobs/{id}` endpoints | None (Celery mocked) |
+| `test_molecule_service.py` | Stage 1 - molecule resolution, format detection, PubChem lookup | PubChem (mocked in unit tests) |
+| `test_retrosynthesis_service.py` | Stage 2 - AiZynthFinder integration, route parsing, OOD detection | AiZynthFinder models (mocked in unit tests) |
+| `test_scoring_service.py` | Stage 3 - SA Score, Green Index, Route Maturity, REACH/GHS | PubChem (mocked in unit tests) |
+| `test_ranking.py` | Stage 4 - route ranking across all optimisation dimensions | None |
+| `test_explainability_service.py` | Stage 5 - rationale generation, Claude API, fallback | Claude API (mocked in unit tests) |
+| `test_synthesis_api.py` | API layer - `/synthesis/plan` and `/synthesis/jobs/{id}` endpoints | None (Celery mocked) |
 
 Tests are split into two tiers by marker:
 
-- **Unit tests** — no external services, models, or network. Run anywhere, fast.
-- **Integration tests** (`-m integration`) — hit real APIs or require downloaded AI models. Skip in CI.
+- **Unit tests** - no external services, models, or network. Run anywhere, fast.
+- **Integration tests** (`-m integration`) - hit real APIs or require downloaded AI models. Skip in CI.
 
 ---
 
@@ -137,7 +137,7 @@ Markers are declared in `pyproject.toml`:
 ```toml
 [tool.pytest.ini_options]
 markers = [
-    "integration: hits real external APIs — skip in CI with -m 'not integration'",
+    "integration: hits real external APIs - skip in CI with -m 'not integration'",
 ]
 ```
 
@@ -158,7 +158,7 @@ Shared fixtures live in `tests/conftest.py`.
 | Fixture | Description |
 |---|---|
 | `client` | Async HTTPX test client wired to the FastAPI app |
-| `target_smiles` | SMILES for smoke tests — overridden via `--smiles "..."` flag, defaults to aspirin |
+| `target_smiles` | SMILES for smoke tests - overridden via `--smiles "..."` flag, defaults to aspirin |
 | `make_step()` | Helper to build a `ReactionStep` with sensible defaults |
 | `make_route()` | Helper to build a `SynthesisRoute` with configurable scores |
 

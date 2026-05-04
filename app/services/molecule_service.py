@@ -1,7 +1,7 @@
 """
-Stage 1 — Input Processing
+Stage 1 - Input Processing
 Resolves any supported input format to a canonical SMILES string.
-Always returns canonical SMILES — that is the contract.
+Always returns canonical SMILES - that is the contract.
 
 Supported inputs:
   SMILES        -> RDKit canonicalise + validate
@@ -34,12 +34,12 @@ from app.models.molecule import InputFormat, MoleculeInput, ResolvedMolecule
 
 logger = get_logger(__name__)
 
-# CID is not a requestable property — PubChem includes it automatically in every response
+# CID is not a requestable property - PubChem includes it automatically in every response
 PUBCHEM_PROPERTIES = "IsomericSMILES,CanonicalSMILES,MolecularFormula,MolecularWeight,IUPACName,InChI,InChIKey"
 
 # Characters / patterns that only appear in SMILES, never in compound names:
-#   =  #  (  )  [  ]  /  \  @  +  %   — explicit bond/stereo/charge notation
-#   c1 n1 o1 s1 p1 b1                  — aromatic atom + ring closure digit
+#   =  #  (  )  [  ]  /  \  @  +  %   - explicit bond/stereo/charge notation
+#   c1 n1 o1 s1 p1 b1                  - aromatic atom + ring closure digit
 _SMILES_CHARS = re.compile(r'[=\#\(\)\[\]/\\@\+\%]|[cnospb]\d')
 
 # Strict CAS pattern: 2–7 digits, dash, 2 digits, dash, 1 digit
@@ -67,11 +67,11 @@ def detect_format(value: str) -> InputFormat:
     Infer the input format from the value string.
 
     Detection order (priority):
-      1. InChI prefix       — certain
-      2. CAS regex          — certain
-      3. SMILES with special chars + RDKit valid — confident
-      4. RDKit valid but no special chars — AMBIGUOUS → raises AmbiguousInputError
-      5. RDKit invalid      — treated as IUPAC / plain language name
+      1. InChI prefix       - certain
+      2. CAS regex          - certain
+      3. SMILES with special chars + RDKit valid - confident
+      4. RDKit valid but no special chars - AMBIGUOUS → raises AmbiguousInputError
+      5. RDKit invalid      - treated as IUPAC / plain language name
 
     Raises AmbiguousInputError when the input is a valid SMILES but contains no
     SMILES-specific characters, making it indistinguishable from a compound name.
@@ -79,15 +79,15 @@ def detect_format(value: str) -> InputFormat:
     """
     v = value.strip()
 
-    # 1. InChI — unambiguous prefix
+    # 1. InChI - unambiguous prefix
     if v.startswith("InChI="):
         return InputFormat.INCHI
 
-    # 2. CAS — strict format
+    # 2. CAS - strict format
     if _CAS_PATTERN.match(v):
         return InputFormat.CAS
 
-    # 3 & 4. SMILES vs name — use RDKit + character heuristic
+    # 3 & 4. SMILES vs name - use RDKit + character heuristic
     mol = Chem.MolFromSmiles(v)
     if mol is not None:
         if _SMILES_CHARS.search(v):
@@ -99,7 +99,7 @@ def detect_format(value: str) -> InputFormat:
                 f"Please supply format explicitly: smiles, cas, iupac, or plain_language."
             )
 
-    # 5. RDKit parse failed — treat as IUPAC name / plain language
+    # 5. RDKit parse failed - treat as IUPAC name / plain language
     return InputFormat.PLAIN_LANGUAGE
 
 
@@ -150,7 +150,7 @@ class MoleculeService:
         canonical = Chem.MolToSmiles(mol)
         base = self._rdkit_metadata(mol, canonical)
 
-        # Best-effort PubChem enrichment — adds CID and IUPAC name if found
+        # Best-effort PubChem enrichment - adds CID and IUPAC name if found
         try:
             props = await self._pubchem_fetch("smiles", canonical)
             base = self._merge_pubchem(base, props)
